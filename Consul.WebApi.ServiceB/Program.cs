@@ -20,7 +20,8 @@ namespace Consul.WebApi.ServiceB
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://*:9002").UseStartup<Startup>();
+                    webBuilder.UseStartup<Startup>()
+                    .UseUrls("http://*:9002");
                 });
     }
 }
