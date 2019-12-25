@@ -1,0 +1,11 @@
+version: '3'
+services:
+  web:
+      restart: always
+      build: 
+        context: .
+        dockerfile: Dockerfile
+      image: "consul.webapi.serviceb"
+      container_name: "consul.webapi.serviceb"
+      ports:
+        - "9002:9002"
