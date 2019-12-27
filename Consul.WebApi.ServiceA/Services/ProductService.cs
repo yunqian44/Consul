@@ -16,23 +16,23 @@ namespace Consul.WebApi.ServiceA.Services
         /// <returns></returns>
         [Hystrix(FallBackMethod = nameof(GetAllProductsFallBackAsync),
             IsEnableCircuitBreaker = true,
-            ExceptionsAllowedBeforeBreaking = 3,
+            ExceptionsAllowedBeforeBreaking = 2,
             MillisecondsOfBreak = 1000 * 5)]
-        public async Task<string> GetAllProductsAsync(string productType)
+        public virtual async Task<string> GetAllProductsAsync(string productType)
         {
             Console.WriteLine($"-->>Starting get product type : {productType}");
-
             string str = await Task.Run(()=> $"Get All Product Success");
             str.ToString();
-
+            throw new ArgumentException();
             // to do : using HttpClient to call outer service to get product list
 
             return $"OK {str}";
         }
 
-        public async Task<string> GetAllProductsFallBackAsync(string productType)
+        public virtual async Task<string> GetAllProductsFallBackAsync(string productType)
         {
             Console.WriteLine($"-->>FallBack : Starting get product type : {productType}");
+
             string str = await Task.Run(() => $"Get All Product Fall");
             str.ToString();
             return $"OK for FallBack  {str}";

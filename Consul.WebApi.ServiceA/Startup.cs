@@ -1,23 +1,17 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Consul.WebApi.Consul;
-using Consul.WebApi.Extensions;
 using Consul.WebApi.ServiceA.AOP;
 using Consul.WebApi.ServiceA.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Consul.WebApi
 {
@@ -33,26 +27,28 @@ namespace Consul.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
-            // 缓存注入
+
+            //缓存注入
             services.AddSingleton<IMemoryCache>(factory =>
             {
                 var cache = new MemoryCache(new MemoryCacheOptions());
                 return cache;
             });
-
             services.AddControllers();
+
+
+            services.AddSingleton<HystrixAOP>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
         {
             #region AutoFac DI
             //注册要通过反射创建的组件
-            builder.RegisterType<HystrixAOP>();//可以直接替换其他拦截器
+            //builder.RegisterType<HystrixAOP>();//可以直接替换其他拦截器
 
-            builder.RegisterAssemblyTypes(Assembly.GetAssembly(typeof(ProductService)))
+            builder.RegisterType<ProductService>()
                .EnableClassInterceptors()
-               .InterceptedBy(typeof(HystrixAOP)); ;
+               .InterceptedBy(typeof(HystrixAOP));
             #endregion
         }
 
@@ -83,7 +79,7 @@ namespace Consul.WebApi
                 ServiceHealthCheck = Configuration["ServiceHealthCheck"],
                 Address = Configuration["ConsulAddress"]
             };
-            app.RegisterConsul(lifetime, consulOption);
+            //app.RegisterConsul(lifetime, consulOption);
 
 
             // 短路中间件，配置Controller路由
