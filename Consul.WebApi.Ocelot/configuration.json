@@ -1,0 +1,30 @@
+{
+  "ReRoutes": [
+    // API ServiceB中的 Consul.WebApi.ValuesService
+    {
+      "DownstreamPathTemplate": "/api/{url}", //是下游服务配置路径模板
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "192.168.1.19", //服务B IP地址
+          "Port": "9002" //服务A 端口Port
+        }
+      ],
+      "UpstreamPathTemplate": "/ValuesService/{url}", //上游服务器配置路径模板，也就是在网关中配置的调用模板
+      "UpstreamHttpMethod": [ "Get", "Post" ] //支持的Http 请求的类型
+    },
+    // API ServiceA中的 Consul.WebApi.ProductService
+    {
+      "DownstreamPathTemplate": "/api/{url}", //是下游服务配置路径模板
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "192.168.1.19", //服务B IP地址
+          "Port": "9001" //服务A 端口Port
+        }
+      ],
+      "UpstreamPathTemplate": "/ProductService/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post" ]
+    }
+  ]
+}
