@@ -16,7 +16,7 @@ namespace Consul.WebApi.ServiceA.Services
         /// <returns></returns>
         [Hystrix(FallBackMethod = nameof(GetAllProductsFallBackAsync),
             IsEnableCircuitBreaker = true,
-            ExceptionsAllowedBeforeBreaking = 2,
+            ExceptionsAllowedBeforeBreaking = 3,
             MillisecondsOfBreak = 1000 * 5)]
         public virtual async Task<string> GetAllProductsAsync(string productType)
         {
