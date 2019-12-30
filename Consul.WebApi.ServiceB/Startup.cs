@@ -46,15 +46,15 @@ namespace Consul.WebApi.ServiceB
             });
 
 
-            var consulOption = new ConsulOption
-            {
-                ServiceName = Configuration["ServiceName"],
-                ServiceIP = Configuration["ServiceIP"],
-                ServicePort = Convert.ToInt32(Configuration["ServicePort"]),
-                ServiceHealthCheck = Configuration["ServiceHealthCheck"],
-                Address = Configuration["ConsulAddress"]
-            };
-            app.RegisterConsul(lifetime, consulOption);
+            //var consulOption = new ConsulOption
+            //{
+            //    ServiceName = Configuration["ServiceName"],
+            //    ServiceIP = Configuration["ServiceIP"],
+            //    ServicePort = Convert.ToInt32(Configuration["ServicePort"]),
+            //    ServiceHealthCheck = Configuration["ServiceHealthCheck"],
+            //    Address = Configuration["ConsulAddress"]
+            //};
+            //app.RegisterConsul(lifetime, consulOption);
         }
     }
 }

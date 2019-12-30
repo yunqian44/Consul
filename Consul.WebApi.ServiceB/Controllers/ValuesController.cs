@@ -44,5 +44,11 @@ namespace Consul.WebApi.ServiceB.Controllers
             }
             return "未发现服务";
         }
+
+        public async Task<string> TestServiceB()
+        {
+            var str= await Task.Run(() => "Success:我叫测试B" );
+            return str;
+        }
     }
 }
