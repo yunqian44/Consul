@@ -1,4 +1,5 @@
-{
+/**********************Ocelot API GeteWay  第一个版本  Start****************************/
+/*{
   "ReRoutes": [
     // API ServiceB中的 Consul.WebApi.ValuesService
     {
@@ -28,3 +29,44 @@
     }
   ]
 }
+*/
+/**********************Ocelot API GeteWay  第一个版本 End****************************/
+/**********************Ocelot API GeteWay  第二个版本(Ocelot+Consul) Start  ****************************/
+{
+  "ReRoutes": [
+    // API01:CAS.ClientService
+    {
+      "UseServiceDiscovery": true, // use Consul service discovery
+      "DownstreamPathTemplate": "/api/{url}",
+      "DownstreamScheme": "http",
+      "ServiceName": "Consul.WebApi.ValuesService",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "UpstreamPathTemplate": "/api/valuesService/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "ReRoutesCaseSensitive": false // non case sensitive
+    },
+    // API02:CAS.ProductService
+    {
+      "UseServiceDiscovery": true, // use Consul service discovery
+      "DownstreamPathTemplate": "/api/{url}",
+      "DownstreamScheme": "http",
+      "ServiceName": "Consul.WebApi.ProductService",
+      "LoadBalancerOptions": {
+        "Type": "RoundRobin"
+      },
+      "UpstreamPathTemplate": "/api/productservice/{url}",
+      "UpstreamHttpMethod": [ "Get", "Post" ],
+      "ReRoutesCaseSensitive": false // non case sensitive
+    }
+  ],
+  "GlobalConfiguration": {
+    //"BaseUrl": "https://api.mybusiness.com"  //域名
+    "ServiceDiscoveryProvider": {
+      "Host": "192.168.1.19", // Consul Service IP
+      "Port": 8500 // Consul Service Port
+    }
+  }
+}
+/**********************Ocelot API GeteWay  第二个版本(Ocelot+Consul) End  ****************************/
