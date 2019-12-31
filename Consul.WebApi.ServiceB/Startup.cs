@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Consul.WebApi.ServiceB.Common;
 using Consul.WebApi.ServiceB.Consul;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,17 +16,24 @@ namespace Consul.WebApi.ServiceB
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
+            Env = env;
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
+        public IWebHostEnvironment Env { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            #region MVC
+            services.AddControllers(); 
+            #endregion
+
+            services.AddSingleton(new Appsettings(Env.ContentRootPath));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

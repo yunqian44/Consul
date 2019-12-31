@@ -37,9 +37,9 @@ namespace Consul.WebApi.Ocelot
             //        .Build());
 
             //�汾һ  Ocelot GeteWay+Consul
-            //services.AddOcelot(new ConfigurationBuilder()
-            //        .AddJsonFile("configuration.json")
-            //        .Build()).AddConsul();
+            services.AddOcelot(new ConfigurationBuilder()
+                    .AddJsonFile("configuration.json")
+                    .Build()).AddConsul();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

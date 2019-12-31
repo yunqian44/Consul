@@ -50,5 +50,13 @@ namespace Consul.WebApi.ServiceB.Controllers
             var str= await Task.Run(() => "Success:我叫测试B" );
             return str;
         }
+
+        public async Task<string[]> TestService()
+        {
+            var str = await Task.Run(() => new string[] { $"ClinetService: {DateTime.Now.ToString()} {Environment.MachineName} " +
+                $"OS: {Environment.OSVersion.VersionString}" });
+
+            return str;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Consul.WebApi.ServiceB.Common;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace Consul.WebApi.ServiceB.Consul
     {
         public static IApplicationBuilder RegisterConsul(this IApplicationBuilder app, IHostApplicationLifetime lifetime, ConsulOption consulOption)
         {
+            var sss= Appsettings.app("ConsulAddress");
             var consulClient = new ConsulClient(x =>
             {
                 // consul 服务地址
@@ -40,6 +42,7 @@ namespace Consul.WebApi.ServiceB.Consul
             {
                 consulClient.Agent.ServiceDeregister(registration.ID).Wait();
             });
+
             return app;
         }
     }
