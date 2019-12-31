@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Consul.WebApi.Consul;
+using Consul.WebApi.Extensions;
 using Consul.WebApi.ServiceA.AOP;
 using Consul.WebApi.ServiceA.Services;
 using Microsoft.AspNetCore.Builder;
@@ -79,7 +80,7 @@ namespace Consul.WebApi
                 ServiceHealthCheck = Configuration["ServiceHealthCheck"],
                 Address = Configuration["ConsulAddress"]
             };
-            //app.RegisterConsul(lifetime, consulOption);
+            app.RegisterConsul(lifetime, consulOption);
 
 
             // 短路中间件，配置Controller路由

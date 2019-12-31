@@ -129,7 +129,7 @@ namespace Consul.WebApi.ServiceA.AOP
                     // 如果没有启用缓存，则直接执行业务方法
                     policy.Execute(() =>
                     {
-                        throw new ArgumentException();
+                     throw new ArgumentException();
                         invocation.Proceed();
                     });
                 }
