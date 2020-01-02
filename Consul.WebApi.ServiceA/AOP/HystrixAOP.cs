@@ -129,7 +129,8 @@ namespace Consul.WebApi.ServiceA.AOP
                     // 如果没有启用缓存，则直接执行业务方法
                     policy.Execute(() =>
                     {
-                     throw new ArgumentException();
+                        //测试熔断机制
+                        //throw new ArgumentException();
                         invocation.Proceed();
                     });
                 }
@@ -137,10 +138,10 @@ namespace Consul.WebApi.ServiceA.AOP
             else
             {
                 // 将策略应用到 invocation.Proceed 方法上
-
                 policy.Execute(() =>
                 {
-                    throw new ArgumentException();
+                    //测试熔断机制
+                    //throw new ArgumentException();
                     invocation.Proceed();
                 });
             }

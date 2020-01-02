@@ -23,7 +23,7 @@ namespace Consul.WebApi.ServiceA.Services
             Console.WriteLine($"-->>Starting get product type : {productType}");
             string str = await Task.Run(()=> $"Get All Product Success");
             str.ToString();
-            throw new ArgumentException();
+            //throw new ArgumentException();
             // to do : using HttpClient to call outer service to get product list
 
             return $"OK {str}";
