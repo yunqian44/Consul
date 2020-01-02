@@ -56,6 +56,10 @@
       "LoadBalancerOptions": {
         "Type": "RoundRobin"
       },
+      "FileCacheOptions": { // cache response data - ttl: 10s
+        "TtlSeconds": 10,
+        "Region": ""
+      },
       "UpstreamPathTemplate": "/api/productservice/{url}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
       "ReRoutesCaseSensitive": false // non case sensitive
