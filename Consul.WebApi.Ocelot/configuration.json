@@ -32,63 +32,81 @@
 */
 /**********************Ocelot API GeteWay  第一个版本 End****************************/
 /**********************Ocelot API GeteWay  第二个版本(Ocelot+Consul) Start  ****************************/
+//{
+//  "ReRoutes": [
+//    // API01:CAS.ClientService
+//    {
+//      "UseServiceDiscovery": true, // use Consul service discovery
+//      "DownstreamPathTemplate": "/api/{url}",
+//      "DownstreamScheme": "http",
+//      "ServiceName": "Consul.WebApi.ValuesService",
+//      "LoadBalancerOptions": {
+//        "Type": "RoundRobin"
+//      },
+//      "UpstreamPathTemplate": "/api/valuesService/{url}",
+//      "UpstreamHttpMethod": [ "Get", "Post" ],
+//      "RateLimitOptions": {
+//        "ClientWhitelist": [ "admin" ],
+//        "EnableRateLimiting": true,
+//        "Period": "1m",
+//        "PeriodTimespan": 15,
+//        "Limit": 10
+//      },
+//      "QoSOptions": {
+//        "ExceptionsAllowedBeforeBreaking": 2, // 允许多少个异常请求
+//        "DurationOfBreak": 5000, // 熔断的时间，单位为秒
+//        "TimeoutValue": 3000 // 如果下游请求的处理时间超过多少则视如该请求超时
+//      },
+//      "ReRoutesCaseSensitive": false // non case sensitive
+//    },
+//    // API02:CAS.ProductService
+//    {
+//      "UseServiceDiscovery": true, // use Consul service discovery
+//      "DownstreamPathTemplate": "/api/{url}",
+//      "DownstreamScheme": "http",
+//      "ServiceName": "Consul.WebApi.ProductService",
+//      "LoadBalancerOptions": {
+//        "Type": "RoundRobin"
+//      },
+//      "FileCacheOptions": { // cache response data - ttl: 10s
+//        "TtlSeconds": 10,
+//        "Region": ""
+//      },
+//      "UpstreamPathTemplate": "/api/productservice/{url}",
+//      "UpstreamHttpMethod": [ "Get", "Post" ],
+//      "RateLimitOptions": {
+//        "ClientWhitelist": [ "admin" ],
+//        "EnableRateLimiting": true,
+//        "Period": "1m",
+//        "PeriodTimespan": 15,
+//        "Limit": 10
+//      },
+//      "QoSOptions": {
+//        "ExceptionsAllowedBeforeBreaking": 2, // 允许多少个异常请求
+//        "DurationOfBreak": 5000, // 熔断的时间，单位为秒
+//        "TimeoutValue": 3000 // 如果下游请求的处理时间超过多少则视如该请求超时
+//      },
+//      "ReRoutesCaseSensitive": false // non case sensitive
+//    }
+//  ],
+//  "GlobalConfiguration": {
+//    //"BaseUrl": "https://api.mybusiness.com"  //域名
+//    "ServiceDiscoveryProvider": {
+//      "Host": "192.168.1.19", // Consul Service IP
+//      "Port": 8500 // Consul Service Port
+//    },
+//    "RateLimitOptions": {
+//      "DisableRateLimitHeaders": false, // Http头  X-Rate-Limit 和 Retry-After 是否禁用
+//      "QuotaExceededMessage": "Too many requests, are you OK?", // 当请求过载被截断时返回的消息
+//      "HttpStatusCode": 999, // 当请求过载被截断时返回的http status
+//      "ClientIdHeader": "client_id" // 用来识别客户端的请求头，默认是 ClientId
+//    }
+//  }
+//}
+/**********************Ocelot API GeteWay  第二个版本(Ocelot+Consul) End  ****************************/
+
+/**********************Ocelot API GeteWay  第三个版本(Ocelot+Consul) Start  ****************************/
 {
-  "ReRoutes": [
-    // API01:CAS.ClientService
-    {
-      "UseServiceDiscovery": true, // use Consul service discovery
-      "DownstreamPathTemplate": "/api/{url}",
-      "DownstreamScheme": "http",
-      "ServiceName": "Consul.WebApi.ValuesService",
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "UpstreamPathTemplate": "/api/valuesService/{url}",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
-      "RateLimitOptions": {
-        "ClientWhitelist": [ "admin" ],
-        "EnableRateLimiting": true,
-        "Period": "1m",
-        "PeriodTimespan": 15,
-        "Limit": 10
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 2, // 允许多少个异常请求
-        "DurationOfBreak": 5000, // 熔断的时间，单位为秒
-        "TimeoutValue": 3000 // 如果下游请求的处理时间超过多少则视如该请求超时
-      },
-      "ReRoutesCaseSensitive": false // non case sensitive
-    },
-    // API02:CAS.ProductService
-    {
-      "UseServiceDiscovery": true, // use Consul service discovery
-      "DownstreamPathTemplate": "/api/{url}",
-      "DownstreamScheme": "http",
-      "ServiceName": "Consul.WebApi.ProductService",
-      "LoadBalancerOptions": {
-        "Type": "RoundRobin"
-      },
-      "FileCacheOptions": { // cache response data - ttl: 10s
-        "TtlSeconds": 10,
-        "Region": ""
-      },
-      "UpstreamPathTemplate": "/api/productservice/{url}",
-      "UpstreamHttpMethod": [ "Get", "Post" ],
-      "RateLimitOptions": {
-        "ClientWhitelist": [ "admin" ],
-        "EnableRateLimiting": true,
-        "Period": "1m",
-        "PeriodTimespan": 15,
-        "Limit": 10
-      },
-      "QoSOptions": {
-        "ExceptionsAllowedBeforeBreaking": 2, // 允许多少个异常请求
-        "DurationOfBreak": 5000, // 熔断的时间，单位为秒
-        "TimeoutValue": 3000 // 如果下游请求的处理时间超过多少则视如该请求超时
-      },
-      "ReRoutesCaseSensitive": false // non case sensitive
-    }
-  ],
   "GlobalConfiguration": {
     //"BaseUrl": "https://api.mybusiness.com"  //域名
     "ServiceDiscoveryProvider": {
@@ -100,6 +118,22 @@
       "QuotaExceededMessage": "Too many requests, are you OK?", // 当请求过载被截断时返回的消息
       "HttpStatusCode": 999, // 当请求过载被截断时返回的http status
       "ClientIdHeader": "client_id" // 用来识别客户端的请求头，默认是 ClientId
+    },
+    "QoSOptions": {
+      "ExceptionsAllowedBeforeBreaking": 3,
+      "DurationOfBreak": 10000,
+      "TimeoutValue": 5000
+    },
+    "LoadBalancerOptions": {
+      "Type": "LeastConnection",
+      "Key": null,
+      "Expiry": 0
+    },
+    "DownstreamScheme": "http",
+    "HttpHandlerOptions": {
+      "AllowAutoRedirect": false,
+      "UseCookieContainer": false,
+      "UseTracing": false
     }
   }
 }
