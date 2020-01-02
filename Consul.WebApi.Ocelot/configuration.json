@@ -45,6 +45,18 @@
       },
       "UpstreamPathTemplate": "/api/valuesService/{url}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
+      "RateLimitOptions": {
+        "ClientWhitelist": [ "admin" ],
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 15,
+        "Limit": 10
+      },
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2, // 允许多少个异常请求
+        "DurationOfBreak": 5000, // 熔断的时间，单位为秒
+        "TimeoutValue": 3000 // 如果下游请求的处理时间超过多少则视如该请求超时
+      },
       "ReRoutesCaseSensitive": false // non case sensitive
     },
     // API02:CAS.ProductService
@@ -69,11 +81,11 @@
         "PeriodTimespan": 15,
         "Limit": 10
       },
-      //"QoSOptions": {
-      //  "ExceptionsAllowedBeforeBreaking": 2, // 允许多少个异常请求
-      //  "DurationOfBreak": 5000, // 熔断的时间，单位为秒
-      //  "TimeoutValue": 3000 // 如果下游请求的处理时间超过多少则视如该请求超时
-      //},
+      "QoSOptions": {
+        "ExceptionsAllowedBeforeBreaking": 2, // 允许多少个异常请求
+        "DurationOfBreak": 5000, // 熔断的时间，单位为秒
+        "TimeoutValue": 3000 // 如果下游请求的处理时间超过多少则视如该请求超时
+      },
       "ReRoutesCaseSensitive": false // non case sensitive
     }
   ],

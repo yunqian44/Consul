@@ -11,9 +11,17 @@ namespace Consul.WebApi.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private static int _count = 0;
+
         [HttpGet]
         public string Test()
         {
+            _count++;
+            Console.WriteLine($"Get...{_count}");
+            if (_count <= 3)
+            {
+                System.Threading.Thread.Sleep(5000);
+            }
             return "请求 ServiceA-1 成功";
         }
     }
