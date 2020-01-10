@@ -8,7 +8,12 @@ namespace Consul.Test
         static void Main(string[] args)
         {
 
-            Case1();
+            //Case1();
+
+            var s = new { aa = "张三", age = "历史" };
+            var b = new { aa = "张三", age = "历史" };
+
+            Console.WriteLine($"s和b相等吗?----{s.Equals(b)}");
             Console.WriteLine("Hello World!");
 
             Console.ReadKey();
