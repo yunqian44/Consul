@@ -52,6 +52,7 @@ namespace Consul.WebApi.ServiceC
             }
 
             app.UseRouting();
+
             // open authentication middleware
             app.UseAuthentication();
 
