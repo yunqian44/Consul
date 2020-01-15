@@ -75,7 +75,7 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
                          ClientName = "Consul.WebApp",
                          AllowedGrantTypes = GrantTypes.Code,
                          ClientSecrets = new [] { new Secret("secret".Sha256()) },//Client用来获取token
-                         RequireConsent = false,
+                         RequireConsent = true,
                          RequirePkce = true,
                          //将用户所有的claims包含在IdToken内
                          AlwaysIncludeUserClaimsInIdToken=true,
