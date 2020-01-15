@@ -20,6 +20,7 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
+                 new IdentityResource("name", "姓名", new List<string> { JwtClaimTypes.Name }),
                 new IdentityResource("roles", "角色", new List<string> { JwtClaimTypes.Role }),
                 new IdentityResource("rolename", "角色名", new List<string> { "rolename" }),
             };
@@ -89,7 +90,8 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
                             IdentityServerConstants.StandardScopes.Profile,
                             IdentityServerConstants.StandardScopes.Email,
                             "roles",
-                            "rolename"
+                            "rolename",
+                            "name"
                          }
                     }
                 };
@@ -101,7 +103,7 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
             {
                     new TestUser
                     {
-                        SubjectId = "1",
+                        SubjectId = "1001",
                         Username = "yunqian",
                         Password = "qwer1234!"
                     }

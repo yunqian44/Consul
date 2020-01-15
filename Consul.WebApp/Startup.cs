@@ -73,6 +73,7 @@ namespace Consul.WebApp
                     options.Scope.Add(OidcConstants.StandardScopes.Email);
                     options.Scope.Add("roles");
                     options.Scope.Add("rolename");
+                    options.Scope.Add("name");
                 });
             #endregion
 
