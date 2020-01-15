@@ -37,7 +37,8 @@ namespace Consul.WebApi.IdentityServer
                 // in-memory, code config
                 .AddTestUsers(InMemoryConfiguration.Users().ToList())
                 .AddInMemoryApiResources(InMemoryConfiguration.GetApiResources())
-                .AddInMemoryClients(InMemoryConfiguration.GetClients());
+                .AddInMemoryClients(InMemoryConfiguration.GetClients())
+                .AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources());
 
 
             builder.AddDeveloperSigningCredential();

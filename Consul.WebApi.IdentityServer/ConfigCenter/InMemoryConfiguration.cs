@@ -1,4 +1,6 @@
-﻿using IdentityServer4.Models;
+﻿using IdentityModel;
+using IdentityServer4;
+using IdentityServer4.Models;
 using IdentityServer4.Test;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -10,6 +12,19 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
 {
     public static class InMemoryConfiguration
     {
+        // scopes define the resources in your system
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+                new IdentityResources.Email(),
+                new IdentityResource("roles", "角色", new List<string> { JwtClaimTypes.Role }),
+                new IdentityResource("rolename", "角色名", new List<string> { "rolename" }),
+            };
+        }
+
         // 这个 Authorization Server 保护了哪些 API （资源）
         public static IEnumerable<ApiResource> GetApiResources()
         {
@@ -53,6 +68,29 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
                         ClientSecrets = new [] { new Secret("secret".Sha256()) },//Client用来获取token
                         AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,//这里使用的是通过用户名密码和ClientCredentials来换取token的方式. ClientCredentials允许Client只使用ClientSecrets来获取token. 这比较适合那种没有用户参与的api动作
                         AllowedScopes = new [] { "consul.webapi.serviced" }// 允许访问的 API 资源
+                    },
+                    new Client
+                    {
+                         ClientId = "consulwebapp",
+                         ClientName = "Consul.WebApp",
+                         AllowedGrantTypes = GrantTypes.Code,
+                         ClientSecrets = new [] { new Secret("secret".Sha256()) },//Client用来获取token
+                         RequireConsent = false,
+                         RequirePkce = true,
+                         //将用户所有的claims包含在IdToken内
+                         AlwaysIncludeUserClaimsInIdToken=true,
+                         // can return access_token to this client
+                         //AllowAccessTokensViaBrowser = true,
+                         RedirectUris = {"http://localhost:9014/signin-oidc"},
+                         PostLogoutRedirectUris = {"http://localhost:9014/signout-callback-oidc" },
+                         AllowedScopes = new List<string>
+                         {
+                            IdentityServerConstants.StandardScopes.OpenId,
+                            IdentityServerConstants.StandardScopes.Profile,
+                            IdentityServerConstants.StandardScopes.Email,
+                            "roles",
+                            "rolename"
+                         }
                     }
                 };
         }
