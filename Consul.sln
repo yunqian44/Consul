@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consul.WebApi.ServiceC", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consul.WebApi.ServiceD", "Consul.WebApi.ServiceD\Consul.WebApi.ServiceD.csproj", "{C10F6EA4-8F22-4E4B-9FFB-89D79E4C8052}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consul.WebApp", "Consul.WebApp\Consul.WebApp.csproj", "{DB25DB4C-5392-4605-89C1-6B609EEDE20A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{C10F6EA4-8F22-4E4B-9FFB-89D79E4C8052}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C10F6EA4-8F22-4E4B-9FFB-89D79E4C8052}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C10F6EA4-8F22-4E4B-9FFB-89D79E4C8052}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB25DB4C-5392-4605-89C1-6B609EEDE20A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB25DB4C-5392-4605-89C1-6B609EEDE20A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB25DB4C-5392-4605-89C1-6B609EEDE20A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB25DB4C-5392-4605-89C1-6B609EEDE20A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{5D5D52B6-EC66-4AC4-94EF-D6FB3D0E39AD} = {C16FC7DF-E780-4155-9BF8-C03007228BBE}
 		{AA5CD57C-E693-4851-B75E-4FCBA369BD1B} = {467D5125-F604-4758-A22F-C712677AB4AD}
 		{C10F6EA4-8F22-4E4B-9FFB-89D79E4C8052} = {467D5125-F604-4758-A22F-C712677AB4AD}
+		{DB25DB4C-5392-4605-89C1-6B609EEDE20A} = {467D5125-F604-4758-A22F-C712677AB4AD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {71E4B35B-1DA9-4483-BC1E-0834B74A2619}
