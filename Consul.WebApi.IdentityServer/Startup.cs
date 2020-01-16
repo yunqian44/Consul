@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Consul.WebApi.IdentityServer.ConfigCenter;
+using Consul.WebApi.IdentityServer.Helper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,8 @@ namespace Consul.WebApi.IdentityServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(new GetTableData(Environment.ContentRootPath));
+
             #region ²âÊÔIdentityServer4
             var builder = services.AddIdentityServer(options =>
                 {

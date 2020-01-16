@@ -54,7 +54,7 @@ namespace Consul.WebApp
                 .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
                 {
                     options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.Authority = Appsettings.app(new string[] { "Idps", "AuthorityUrl" }); ;
+                    options.Authority = Appsettings.app(new string[] { "Idps", "AuthorityUrl" });
 
                     // please use https in production env
                     options.RequireHttpsMetadata = Appsettings.app(new string[] { "Idps", "RequireHttps" }).ObjToBool();
