@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Consul.WebApi.Ocelot.Common;
+using Consul.WebApi.Ocelot.Extension;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +21,13 @@ namespace Consul.WebApi.Ocelot
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
+
+        public IWebHostEnvironment Environment { get; }
 
         public IConfiguration Configuration { get; }
 
@@ -30,6 +36,9 @@ namespace Consul.WebApi.Ocelot
         {
             services.AddControllers();
 
+            services.AddSingleton(new Appsettings(Environment.ContentRootPath));
+
+
             //注入Ocelot 配置信息
 
             //版本一  Ocelot GeteWay
@@ -37,7 +46,33 @@ namespace Consul.WebApi.Ocelot
             //        .AddJsonFile("configuration.json")
             //        .Build());
 
-            //版本一  Ocelot GeteWay+Consul
+            // IdentityServer
+            #region IdentityServerAuthenticationOptions => need to refactor
+            Action<IdentityServerAuthenticationOptions> isaOptClient = option =>
+            {
+                option.Authority = Appsettings.app(new string[] { "Idps", "AuthorityUrl" });
+                option.ApiName = Appsettings.app(new string[] { "Idps", "ApiNames", "ValuesServiceName" });
+                option.RequireHttpsMetadata = Appsettings.app(new string[] { "Idps", "RequireHttps" }).ObjToBool();
+                //option.SupportedTokens = SupportedTokens.Both;
+                option.ApiSecret = Appsettings.app(new string[] { "Idps", "ApiNames", "ValuesServiceName" });
+            };
+
+            Action<IdentityServerAuthenticationOptions> isaOptProduct = option =>
+            {
+                option.Authority = Appsettings.app(new string[] { "Idps", "AuthorityUrl" });
+                option.ApiName = Appsettings.app(new string[] { "Idps", "ApiNames", "ProductServiceName" });
+                option.RequireHttpsMetadata = Appsettings.app(new string[] { "Idps", "RequireHttps" }).ObjToBool();
+                //option.SupportedTokens = SupportedTokens.Both;
+                option.ApiSecret = Appsettings.app(new string[] { "Idps", "ApiNames", "ProductService" });
+            };
+            #endregion
+
+            services.AddAuthentication()
+                .AddIdentityServerAuthentication("ValuesServiceKey", isaOptClient)
+                .AddIdentityServerAuthentication("ProductServiceKey", isaOptProduct);
+
+
+            //版本二  Ocelot GeteWay+Consul
             services.AddOcelot(new ConfigurationBuilder()
                     .AddJsonFile("configuration.json")
                     .Build()).AddConsul().AddPolly();
