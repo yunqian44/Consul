@@ -1,0 +1,15 @@
+[
+  {
+    "Id": 1,
+    "LoginName": "laohu",
+    "Password": "qwer1234!",
+    "UserName": "huge",
+    "RealName": "胡歌",
+    "Status": 0,
+    "Remark": null,
+    "Sex": 18,
+    "Age": 0,
+    "Address": "上海市浦东区南京路 101弄",
+    "IsDeleted": false
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "Id": 1,
+    "IsDeleted": "0",
+    "Name": "SuperAdmin",
+    "Description": "超级管理员",
+    "Enabled": true
+  }
+]
