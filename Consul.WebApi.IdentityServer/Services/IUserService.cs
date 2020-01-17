@@ -14,7 +14,7 @@ namespace Consul.WebApi.IdentityServer.Services
         /// </summary>
         /// <param name="name">name</param>
         /// <returns></returns>
-        Task<List<UserModel>> QueryUserByName(string name); 
+        Task<UserModel> QueryUserByName(string name); 
         #endregion
     }
 }

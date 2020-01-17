@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Consul.WebApi.IdentityServer.AuthHelper;
 using Consul.WebApi.IdentityServer.ConfigCenter;
 using Consul.WebApi.IdentityServer.Helper;
+using Consul.WebApi.IdentityServer.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +31,10 @@ namespace Consul.WebApi.IdentityServer
         {
             services.AddSingleton(new GetTableData(Environment.ContentRootPath));
 
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IRoleService, RoleService>();
+            services.AddSingleton<IUserRoleService, UserRoleService>();
+
             #region ²âÊÔIdentityServer4
             var builder = services.AddIdentityServer(options =>
                 {
@@ -38,10 +44,12 @@ namespace Consul.WebApi.IdentityServer
                     options.Events.RaiseSuccessEvents = true;
                 })
                 // in-memory, code config
-                .AddTestUsers(InMemoryConfiguration.Users().ToList())
+                //.AddTestUsers(InMemoryConfiguration.Users().ToList())
                 .AddInMemoryApiResources(InMemoryConfiguration.GetApiResources())
                 .AddInMemoryClients(InMemoryConfiguration.GetClients())
-                .AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources());
+                .AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources())
+                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+                .AddProfileService<CustomProfileService>();
 
 
             builder.AddDeveloperSigningCredential();

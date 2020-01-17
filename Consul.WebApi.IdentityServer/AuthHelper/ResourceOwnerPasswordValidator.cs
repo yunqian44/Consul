@@ -12,33 +12,52 @@ namespace Consul.WebApi.IdentityServer.AuthHelper
     public class ResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
         private IUserService _userService;
+        private IRoleService _roleService;
+        private IUserRoleService _userRoleService;
 
-        public ResourceOwnerPasswordValidator(IUserService userService)
+        public ResourceOwnerPasswordValidator(IUserService userService,
+            IRoleService roleService,
+            IUserRoleService userRoleService)
         {
             this._userService = userService;
+            this._roleService = roleService;
+            this._userRoleService=userRoleService;
         }
 
         public Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
-            //LoginUser loginUser = null;
-            //bool isAuthenticated = _userService.Authenticate(context.UserName, context.Password, out loginUser);
-            //if (!isAuthenticated)
-            //{
-            //    context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "Invalid client credential");
-            //}
-            //else
-            //{
-            //    context.Result = new GrantValidationResult(
-            //        subject: context.UserName,
-            //        authenticationMethod: "custom",
-            //        claims: new Claim[] {
-            //            new Claim("Name", context.UserName),
-            //            new Claim("Id", loginUser.Id.ToString()),
-            //            new Claim("RealName", loginUser.RealName),
-            //            new Claim("Email", loginUser.Email)
-            //        }
-            //    );
-            //}
+            var user = _userService.QueryUserByName(context.UserName);
+            if (user == null && user.Result.IsDeleted)
+            {
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "Invalid client credential");
+            }
+
+            var ss = GrantTypes.Implicit.First();
+
+            if (context.Password != user.Result.Password)
+            {
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "username or password fail");
+            }
+            var roleId = _userRoleService.QueryUserRoleList().Result.FirstOrDefault(u=>u.Id==user.Id)?.RoleId;
+           
+            var roleName = _userRoleService.QueryUserRoleList().Result.Where(d => d.Id == roleId).Select(d => d.Id).ToArray().ToString();
+               
+            if (roleId<=0||string.IsNullOrWhiteSpace(roleName))
+            {
+                context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "net found user role information");
+            }
+
+            context.Result = new GrantValidationResult(
+                subject: context.UserName,
+                authenticationMethod: GrantTypes.ResourceOwnerPassword.First(),
+                claims: new Claim[] {
+                        new Claim("Name", context.UserName),
+                        new Claim("Id", user.Result.FirstOrDefault().UserName),
+                        new Claim("RealName", user.Result.FirstOrDefault().RealName),
+                        new Claim("Roles", roleName)
+                }
+            );
+
             return Task.CompletedTask;
         }
     }

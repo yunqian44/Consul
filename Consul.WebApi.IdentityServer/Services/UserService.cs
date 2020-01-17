@@ -15,9 +15,10 @@ namespace Consul.WebApi.IdentityServer.Services
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public async Task<List<UserModel>> QueryUserByName(string name)
+        public async Task<UserModel> QueryUserByName(string name)
         {
-            return await Task.Run(() => { return JsonHelper.ParseFormByJson<List<UserModel>>(GetTableData.GetData(nameof(UserModel))); });
+            var list= JsonHelper.ParseFormByJson<List<UserModel>>(GetTableData.GetData(nameof(UserModel)));
+            return await Task.Run(() => { return list.FirstOrDefault(u => u.UserName.Equals(name)); });
         } 
         #endregion
     }
