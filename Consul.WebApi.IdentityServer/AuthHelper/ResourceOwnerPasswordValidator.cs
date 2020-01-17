@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Consul.WebApi.IdentityServer.Extension;
 
 namespace Consul.WebApi.IdentityServer.AuthHelper
 {
@@ -27,9 +28,10 @@ namespace Consul.WebApi.IdentityServer.AuthHelper
         public Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
             var user = _userService.QueryUserByName(context.UserName);
-            if (user == null && user.Result.IsDeleted)
+            if (user.Result == null || user.Result.IsDeleted)
             {
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "Invalid client credential");
+                return Task.CompletedTask;
             }
 
             var ss = GrantTypes.Implicit.First();
@@ -37,14 +39,15 @@ namespace Consul.WebApi.IdentityServer.AuthHelper
             if (context.Password != user.Result.Password)
             {
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "username or password fail");
+                return Task.CompletedTask;
             }
-            var roleId = _userRoleService.QueryUserRoleList().Result.FirstOrDefault(u=>u.Id==user.Id)?.RoleId;
+            var roleId = _userRoleService.QueryUserRoleList().Result.FirstOrDefault(u=>u.UserId==user.Result.Id)?.RoleId;
            
-            var roleName = _userRoleService.QueryUserRoleList().Result.Where(d => d.Id == roleId).Select(d => d.Id).ToArray().ToString();
-               
+            var roleName = _userRoleService.QueryUserRoleList().Result.Where(d => d.Id == roleId).Select(d => d.Id).ToArray().ArrayToString(new char[] { ','});
             if (roleId<=0||string.IsNullOrWhiteSpace(roleName))
             {
                 context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant, "net found user role information");
+                return Task.CompletedTask;
             }
 
             context.Result = new GrantValidationResult(
@@ -52,8 +55,8 @@ namespace Consul.WebApi.IdentityServer.AuthHelper
                 authenticationMethod: GrantTypes.ResourceOwnerPassword.First(),
                 claims: new Claim[] {
                         new Claim("Name", context.UserName),
-                        new Claim("Id", user.Result.FirstOrDefault().UserName),
-                        new Claim("RealName", user.Result.FirstOrDefault().RealName),
+                        new Claim("Id", user.Result.Id.ToString()),
+                        new Claim("RealName", user.Result.RealName),
                         new Claim("Roles", roleName)
                 }
             );
