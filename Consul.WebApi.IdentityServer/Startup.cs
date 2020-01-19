@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Consul.WebApi.IdentityServer.AuthHelper;
+using Consul.WebApi.IdentityServer.Common;
 using Consul.WebApi.IdentityServer.ConfigCenter;
 using Consul.WebApi.IdentityServer.Helper;
 using Consul.WebApi.IdentityServer.Services;
@@ -30,6 +31,8 @@ namespace Consul.WebApi.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(new GetTableData(Environment.ContentRootPath));
+            services.AddSingleton(new Appsettings(Environment.ContentRootPath));
+
 
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IRoleService, RoleService>();

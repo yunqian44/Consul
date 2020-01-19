@@ -20,7 +20,7 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
                 new IdentityResources.Email(),
-                 new IdentityResource("name", "姓名", new List<string> { JwtClaimTypes.Name }),
+                new IdentityResource("name", "姓名", new List<string> { JwtClaimTypes.Name }),
                 new IdentityResource("roles", "角色", new List<string> { JwtClaimTypes.Role }),
                 new IdentityResource("rolename", "角色名", new List<string> { "rolename" }),
             };
@@ -45,6 +45,7 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
                     new Client
                     {
                         ClientId = "serviceA",//定义客户端 Id
+                        ClientName = "consul.webapi.servicea",
                         ClientSecrets = new [] { new Secret("secret".Sha256()) },//Client用来获取token
                         AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,//这里使用的是通过用户名密码和ClientCredentials来换取token的方式. ClientCredentials允许Client只使用ClientSecrets来获取token. 这比较适合那种没有用户参与的api动作
                         AllowedScopes = new [] { "consul.webapi.servicea", IdentityServerConstants.StandardScopes.OpenId }// 允许访问的 API 资源
@@ -52,13 +53,15 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
                     new Client
                     {
                         ClientId = "serviceB",//定义客户端 Id
+                         ClientName = "consul.webapi.serviceb",
                         ClientSecrets = new [] { new Secret("secret".Sha256()) },//Client用来获取token
-                        AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,//这里使用的是通过用户名密码和ClientCredentials来换取token的方式. ClientCredentials允许Client只使用ClientSecrets来获取token. 这比较适合那种没有用户参与的api动作
+                        AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,//这里使用的是通过用户名密码和ClientCredentials来换取token的方式. ClientCredentials允许Client只使用ClientSecrets来获取token. 这比较适合那种没有用户参与的api动作
                         AllowedScopes = new [] { "consul.webapi.serviceb" }// 允许访问的 API 资源
                     },
                     new Client
                     {
                         ClientId = "serviceC",//定义客户端 Id
+                        ClientName = "consul.webapi.servicec",
                         ClientSecrets = new [] { new Secret("secret".Sha256()) },//Client用来获取token
                         AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,//这里使用的是通过用户名密码和ClientCredentials来换取token的方式. ClientCredentials允许Client只使用ClientSecrets来获取token. 这比较适合那种没有用户参与的api动作
                         AllowedScopes = new [] { "consul.webapi.servicec" }// 允许访问的 API 资源
@@ -66,6 +69,7 @@ namespace Consul.WebApi.IdentityServer.ConfigCenter
                     new Client
                     {
                         ClientId = "serviceD",//定义客户端 Id
+                        ClientName = "consul.webapi.serviced",
                         ClientSecrets = new [] { new Secret("secret".Sha256()) },//Client用来获取token
                         AllowedGrantTypes = GrantTypes.ResourceOwnerPasswordAndClientCredentials,//这里使用的是通过用户名密码和ClientCredentials来换取token的方式. ClientCredentials允许Client只使用ClientSecrets来获取token. 这比较适合那种没有用户参与的api动作
                         AllowedScopes = new [] { "consul.webapi.serviced" }// 允许访问的 API 资源
