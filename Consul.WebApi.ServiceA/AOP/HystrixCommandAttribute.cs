@@ -58,13 +58,13 @@ namespace Consul.WebApi.ServiceA.AOP
         #endregion
 
 
-        private readonly IMemoryCache _memoryCache= new MemoryCache(new MemoryCacheOptions());
+        private readonly IMemoryCache _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
-        private IAsyncPolicy policy;
+        private ISyncPolicy policy;
 
         public HystrixCommandAttribute()
         {
-            
+
         }
 
         public override async Task Invoke(AspectContext context, AspectDelegate next)
@@ -80,34 +80,58 @@ namespace Consul.WebApi.ServiceA.AOP
             {
                 if (policy == null)
                 {
-                    policy = Policy.NoOpAsync();//创建一个空的Policy
-                    if (IsEnableCircuitBreaker)
+                    policy = Policy
+                   .Handle<ArgumentException>()
+                   .Fallback((ctx, t) =>
+                   {
+                       //AspectContext aspectContext = (AspectContext)ctx["aspectContext"];
+                       //var fallBackMethod = context.ServiceMethod.DeclaringType.GetMethod(this.FallBackMethod);
+                       //Object fallBackResult = fallBackMethod.Invoke(context.Implementation, context.Parameters);
+
+                       ////不能如下这样，因为这是闭包相关，如果这样写第二次调用Invoke的时候context指向的
+                       ////还是第一次的对象，所以要通过Polly的上下文来传递AspectContext
+                       ////context.ReturnValue = fallBackResult;
+                       //aspectContext.ReturnValue = fallBackResult;
+
+                       Console.WriteLine("我也是醉了");
+                    }, (ex, t) =>
                     {
-                        policy = policy.WrapAsync(Policy.Handle<Exception>().CircuitBreakerAsync(ExceptionsAllowedBeforeBreaking, TimeSpan.FromMilliseconds(MillisecondsOfBreak)));
-                    }
-                    if (TimeOutMilliseconds > 0)
-                    {
-                        policy = policy.WrapAsync(Policy.TimeoutAsync(() => TimeSpan.FromMilliseconds(TimeOutMilliseconds), Polly.Timeout.TimeoutStrategy.Pessimistic));
-                    }
+                        //Console.WriteLine("哈哈 我终于进来了");
+                        //context.ReturnValue = "哈哈哈";
+
+                        Console.WriteLine("我TM也是醉了");
+                    });
+                    // 设置 最大重试次数限制
                     if (MaxRetryTimes > 0)
                     {
-                        policy = policy.WrapAsync(Policy.Handle<Exception>().WaitAndRetryAsync(MaxRetryTimes, i => TimeSpan.FromMilliseconds(RetryIntervalMilliseconds)));
+                        policy = policy.Wrap(Policy.Handle<ArgumentException>()
+                           .WaitAndRetry(MaxRetryTimes,
+                           i => TimeSpan.FromMilliseconds(RetryIntervalMilliseconds)));
                     }
-                    var policyFallBack = Policy
-                    .Handle<Exception>()
-                    .FallbackAsync(async (ctx, t) =>
-                    {
-                        AspectContext aspectContext = (AspectContext)ctx["aspectContext"];
-                        var fallBackMethod = context.ServiceMethod.DeclaringType.GetMethod(this.FallBackMethod);
-                        Object fallBackResult = fallBackMethod.Invoke(context.Implementation, context.Parameters);
-                        
-                        //不能如下这样，因为这是闭包相关，如果这样写第二次调用Invoke的时候context指向的
-                        //还是第一次的对象，所以要通过Polly的上下文来传递AspectContext
-                        //context.ReturnValue = fallBackResult;
 
-                        aspectContext.ReturnValue = fallBackResult;
-                    }, async (ex, t) => { });
-                    policyFallBack.WrapAsync(policy);
+                    // 启用熔断保护（CircuitBreaker）
+                    if (IsEnableCircuitBreaker)
+                    {
+                        policy = policy.Wrap(Policy.Handle<ArgumentException>()
+                            .CircuitBreaker(ExceptionsAllowedBeforeBreaking,
+                            TimeSpan.FromMilliseconds(MillisecondsOfBreak), (ex, ts) =>
+                            {
+                                // assuem to do logging
+                                Console.WriteLine($"Service API OnBreak -- ts = {ts.Seconds}s, ex.message = {ex.Message}");
+                            }, () =>
+                            {
+                                // assume to do logging
+                                Console.WriteLine($"Service API OnReset");
+                            }));
+                    }
+
+                    // 设置超时时间
+                    if (TimeOutMilliseconds > 0)
+                    {
+                        policy = policy.Wrap(Policy.Timeout(() =>
+                            TimeSpan.FromMilliseconds(TimeOutMilliseconds),
+                            Polly.Timeout.TimeoutStrategy.Pessimistic));
+                    }
                     //policy = policyFallBack.WrapAsync(policy);
                     //放入
                     //policies.TryAdd(context.ServiceMethod, policy);
@@ -127,11 +151,12 @@ namespace Consul.WebApi.ServiceA.AOP
                 if (_memoryCache.TryGetValue(cacheKey, out var cacheValue))
                 {
                     context.ReturnValue = cacheValue;
+                    await Task.CompletedTask;
                 }
                 else
                 {
                     //如果缓存中没有，则执行实际被拦截的方法
-                    await policy.ExecuteAsync(ctx => next(context), pollyCtx);
+                    policy.Execute(() => { next(context); });
                     //存入缓存中
                     using (var cacheEntry = _memoryCache.CreateEntry(cacheKey))
                     {
@@ -142,7 +167,10 @@ namespace Consul.WebApi.ServiceA.AOP
             }
             else//如果没有启用缓存，就直接执行业务方法
             {
-                await policy.ExecuteAsync(ctx => next(context), pollyCtx);
+                policy.Execute(() =>
+                {
+                    next(context);
+                });
             }
 
         }

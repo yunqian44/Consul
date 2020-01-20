@@ -44,18 +44,20 @@ namespace Consul.WebApi.ServiceA.AOP
                     if (policy == null)
                     {
                         policy = Policy
-                          .Handle<ArgumentException>()
-                          .Fallback(async (ctx, t) =>
-                       {
+                         .Handle<ArgumentException>()
+                         .Fallback(async (ctx, t) =>
+                      {
+                          var type = invocation.TargetType;
+                          object obj = System.Activator.CreateInstance(type);
+                          var method = type.GetMethod(qHystrixAttribute.FallBackMethod);
+                          invocation.ReturnValue = await Task.Run(() => method.Invoke(obj, invocation.Arguments));
+                          //return;
 
-                            //var fallBackMethod = .ServiceMethod.DeclaringType.GetMethod(qHystrixAttribute.FallBackMethod);
-                            //var fallBackResult = fallBackMethod.Invoke(context.Implementation, context.Parameters);
-                           // Console.WriteLine("哈哈 我终于进来了");
-                           //invocation.ReturnValue = Task.Run(() => "哈哈哈");
-                           //return;
-                       }, async (ex, t) => {
+                          Console.WriteLine("我是降级后的数据");
+                      }, async (ex, t) =>
+                       {
                            Console.WriteLine("哈哈 我终于进来了");
-                           invocation.ReturnValue = Task.Run(() => "哈哈哈");
+                           invocation.ReturnValue = await Task.Run(() => "哈哈哈");
                            return;
                        });
                     }
@@ -76,12 +78,12 @@ namespace Consul.WebApi.ServiceA.AOP
                             .CircuitBreaker(qHystrixAttribute.ExceptionsAllowedBeforeBreaking,
                             TimeSpan.FromMilliseconds(qHystrixAttribute.MillisecondsOfBreak), (ex, ts) =>
                             {
-                            // assuem to do logging
-                            Console.WriteLine($"Service API OnBreak -- ts = {ts.Seconds}s, ex.message = {ex.Message}");
+                                // assuem to do logging
+                                Console.WriteLine($"Service API OnBreak -- ts = {ts.Seconds}s, ex.message = {ex.Message}");
                             }, () =>
                             {
-                            // assume to do logging
-                            Console.WriteLine($"Service API OnReset");
+                                // assume to do logging
+                                Console.WriteLine($"Service API OnReset");
                             }));
                     }
 
@@ -131,7 +133,15 @@ namespace Consul.WebApi.ServiceA.AOP
                     {
                         //测试熔断机制
                         //throw new ArgumentException();
-                        invocation.Proceed();
+                        try
+                        {
+                            throw new ArgumentException();
+                            invocation.Proceed();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("我出现错误了");
+                        }
                     });
                 }
             }
@@ -141,7 +151,7 @@ namespace Consul.WebApi.ServiceA.AOP
                 policy.Execute(() =>
                 {
                     //测试熔断机制
-                    //throw new ArgumentException();
+                    throw new ArgumentException();
                     invocation.Proceed();
                 });
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using AspectCore.Extensions.Autofac;
 using Autofac;
 using Autofac.Extras.DynamicProxy;
 using Consul.WebApi.Consul;
@@ -38,7 +39,8 @@ namespace Consul.WebApi
             services.AddControllers();
 
 
-            services.AddSingleton<HystrixAOP>();
+            //services.AddSingleton<HystrixAOP>();
+            services.AddScoped<ProductService>();
         }
 
         public void ConfigureContainer(ContainerBuilder builder)
@@ -47,10 +49,26 @@ namespace Consul.WebApi
             //注册要通过反射创建的组件
             //builder.RegisterType<HystrixAOP>();//可以直接替换其他拦截器
 
-            builder.RegisterType<ProductService>()
-               .EnableClassInterceptors()
-               .InterceptedBy(typeof(HystrixAOP));
+            //builder.RegisterType<ProductService>()
+            //   .EnableClassInterceptors()
+            //   .InterceptedBy(typeof(HystrixAOP));
             #endregion
+
+            foreach (Type type in typeof(Program).Assembly.GetExportedTypes())
+            {
+                //判断类中是否有标注了 CustomInterceptorAttribute 的方法
+                bool hasCustomInterceptorAttr = type.GetMethods()
+                 .Any(m => m.GetCustomAttribute(typeof(HystrixCommandAttribute)) != null);
+                if (hasCustomInterceptorAttr)
+                {
+                    builder.RegisterAssemblyTypes(type.Assembly).AsImplementedInterfaces();
+                }
+            }
+            builder.RegisterDynamicProxy();
+
+            //builder.RegisterAssemblyTypes(t).
+            //Where(x => x.Name.EndsWith("service", StringComparison.OrdinalIgnoreCase)).AsImplementedInterfaces();
+            //builder.RegisterDynamicProxy();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,15 +90,15 @@ namespace Consul.WebApi
                 endpoints.MapControllers();
             });
 
-            var consulOption = new ConsulOption
-            {
-                ServiceName = Configuration["ServiceName"],
-                ServiceIP = Configuration["ServiceIP"],
-                ServicePort = Convert.ToInt32(Configuration["ServicePort"]),
-                ServiceHealthCheck = Configuration["ServiceHealthCheck"],
-                Address = Configuration["ConsulAddress"]
-            };
-            app.RegisterConsul(lifetime, consulOption);
+            //var consulOption = new ConsulOption
+            //{
+            //    ServiceName = Configuration["ServiceName"],
+            //    ServiceIP = Configuration["ServiceIP"],
+            //    ServicePort = Convert.ToInt32(Configuration["ServicePort"]),
+            //    ServiceHealthCheck = Configuration["ServiceHealthCheck"],
+            //    Address = Configuration["ConsulAddress"]
+            //};
+            //app.RegisterConsul(lifetime, consulOption);
 
 
             // 短路中间件，配置Controller路由
