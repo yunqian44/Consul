@@ -23,7 +23,7 @@ namespace Consul.WebApi.ServiceA.Controllers
         [HttpGet("{id}",Name ="Get")]
         public async Task<string> Get(int id)
         {
-            var product = await productService.GetAllProductsAsync("B");
+            var product = await productService.GetAllProductsAsync("B",1);
 
             return product;
         }

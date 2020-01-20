@@ -52,7 +52,7 @@ namespace Consul.WebApi.ServiceA.Services
             return $"OK {str}";
         }
 
-        public virtual async Task<string> GetAllProductsFallBackAsync(string productType)
+        public virtual async Task<string> GetAllProductsFallBackAsync(string productType, int productNum)
         {
             Console.WriteLine($"-->>FallBack : Starting get product type : {productType}");
 
