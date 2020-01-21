@@ -44,6 +44,7 @@ namespace Consul.Test
             {
                 StartTime = startTime;
                 EndTime = endTime;    
+
             }
 
             //operator 后面跟需要转换的类型
