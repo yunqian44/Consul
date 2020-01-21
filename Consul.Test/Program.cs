@@ -43,7 +43,7 @@ namespace Consul.Test
             public DateTimeRange(DateTime startTime, DateTime endTime)
             {
                 StartTime = startTime;
-                EndTime = endTime;  
+                EndTime = endTime;    
             }
 
             //operator 后面跟需要转换的类型
