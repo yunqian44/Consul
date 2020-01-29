@@ -49,6 +49,7 @@ namespace Consul.WebApi.ServiceA.Services
             throw new ArgumentException();
             // to do : using HttpClient to call outer service to get product list
 
+
             return $"OK {str}";
         }
 
