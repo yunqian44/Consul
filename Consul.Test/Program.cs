@@ -18,12 +18,20 @@ namespace Consul.Test
             //Console.WriteLine("Hello World!"); 
             #endregion
 
-            DateTimeRange timeRange = new DateTimeRange(DateTime.Now.AddHours(-1),DateTime.Now);
+            #region operator 操作符号
+            DateTimeRange timeRange = new DateTimeRange(DateTime.Now.AddHours(-1), DateTime.Now);
 
             double hours = timeRange;
 
             double hours2 = (DateTimeRange)timeRange;
+            #endregion
 
+            var s= Console.ReadLine();
+            var temp = s.Split(" ");
+
+            int num = temp[temp.Length - 1].Length;
+
+            Console.WriteLine(num);
             Console.ReadKey();
         }
 

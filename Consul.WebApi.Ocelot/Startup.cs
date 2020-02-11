@@ -46,7 +46,7 @@ namespace Consul.WebApi.Ocelot
             //        .AddJsonFile("configuration.json")
             //        .Build());
 
-            // IdentityServer
+            // specified IdentityServer 4 configuration
             #region IdentityServerAuthenticationOptions => need to refactor
             Action<IdentityServerAuthenticationOptions> isaOptClient = option =>
             {

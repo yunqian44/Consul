@@ -41,7 +41,7 @@
       "DownstreamScheme": "http",
       "ServiceName": "Consul.WebApi.ValuesService",
       "LoadBalancerOptions": {
-        "Type": "RoundRobin"
+        "Type": "RoundRobin" //1,LeastConnection:最少的连接；2，RoundRobin：轮询
       },
       "UpstreamPathTemplate": "/api/valuesService/{url}",
       "UpstreamHttpMethod": [ "Get", "Post" ],
