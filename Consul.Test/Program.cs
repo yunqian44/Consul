@@ -28,7 +28,6 @@ namespace Consul.Test
 
             var s= Console.ReadLine();
             var temp = s.Split(" ");
-
             int num = temp[temp.Length - 1].Length;
 
             Console.WriteLine(num);
