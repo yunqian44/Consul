@@ -59,7 +59,7 @@ namespace Consul.WebApp
                     // please use https in production env
                     options.RequireHttpsMetadata = Appsettings.app(new string[] { "Idps", "RequireHttps" }).ObjToBool();
                     options.ClientId = Appsettings.app(new string[] { "Idps", "ClientId" });
-                    options.ResponseType = Appsettings.app(new string[] { "Idps", "ResponseType" }); // allow to return access token
+                    options.ResponseType = Appsettings.app(new string[] { "Idps", "ResponseType" }); //"id_token token"   allow to return access token
                     options.ClientSecret = "secret";
                     options.SaveTokens = Appsettings.app(new string[] { "Idps", "SaveTokens" }).ObjToBool();
 
