@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consul.WebApp", "Consul.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consul.Azure.Active.Directory.WebApi", "Consul.Azure.Active.Directory.WebApi\Consul.Azure.Active.Directory.WebApi.csproj", "{4CD182D1-7DFF-48FC-9F7C-C196752508AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consul.Azure.Active,Directory.IdentityServer", "Consul.Azure.Active,Directory.IdentityServer\Consul.Azure.Active,Directory.IdentityServer.csproj", "{24F63978-54FE-4378-A23E-1A27D0601D78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consul.Azure.Active,Directory.IdentityServer", "Consul.Azure.Active,Directory.IdentityServer\Consul.Azure.Active,Directory.IdentityServer.csproj", "{24F63978-54FE-4378-A23E-1A27D0601D78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Consul.Azure.Active.Directory.WebApp", "Consul.Azure.Active.Directory.WebApp\Consul.Azure.Active.Directory.WebApp.csproj", "{63660B34-03D6-4A3E-8FC8-882CEE0940FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,10 @@ Global
 		{24F63978-54FE-4378-A23E-1A27D0601D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24F63978-54FE-4378-A23E-1A27D0601D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24F63978-54FE-4378-A23E-1A27D0601D78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63660B34-03D6-4A3E-8FC8-882CEE0940FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63660B34-03D6-4A3E-8FC8-882CEE0940FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63660B34-03D6-4A3E-8FC8-882CEE0940FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63660B34-03D6-4A3E-8FC8-882CEE0940FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
