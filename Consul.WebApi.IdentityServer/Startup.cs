@@ -47,12 +47,12 @@ namespace Consul.WebApi.IdentityServer
                     options.Events.RaiseSuccessEvents = true;
                 })
                 // in-memory, code config
-                //.AddTestUsers(InMemoryConfiguration.Users().ToList())
+                .AddTestUsers(InMemoryConfiguration.Users().ToList())
                 .AddInMemoryApiResources(InMemoryConfiguration.GetApiResources())
                 .AddInMemoryClients(InMemoryConfiguration.GetClients())
-                .AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources())
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
-                .AddProfileService<CustomProfileService>();
+                .AddInMemoryIdentityResources(InMemoryConfiguration.GetIdentityResources());
+                //.AddResourceOwnerValidator<ResourceOwnerPasswordValidator>()
+                //.AddProfileService<CustomProfileService>();
 
 
             builder.AddDeveloperSigningCredential();
