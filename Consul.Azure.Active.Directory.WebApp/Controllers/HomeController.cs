@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Consul.Azure.Active.Directory.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
 
 namespace Consul.Azure.Active.Directory.WebApp.Controllers
 {
@@ -42,6 +44,11 @@ namespace Consul.Azure.Active.Directory.WebApp.Controllers
 
             return View();
 
+        }
+
+        public async Task Logout()
+        {
+            await HttpContext.SignOutAsync(AzureADB2CDefaults.AuthenticationScheme);
         }
     }
 }

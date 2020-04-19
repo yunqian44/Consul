@@ -1,11 +1,20 @@
 ﻿@{
     string name = null;
-    if (!true.Equals(ViewData["signed-out"]))
+    if (User.Identity.IsAuthenticated)
     {
-        var ss = Context.User?.Claims;
-        name = "张三";
+         name = User.Identity.Name;
     }
 }
+
+@using Microsoft.AspNetCore.Authentication.AzureADB2C.UI
+@using Microsoft.Extensions.Options
+@inject IOptionsMonitor<AzureADB2COptions> AzureADB2COptions
+
+@{
+    var options = AzureADB2COptions.Get(AzureADB2CDefaults.AuthenticationScheme);
+    
+}
+
 
 <!DOCTYPE html>
 <html lang="en">

@@ -25,9 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consul.WebApp", "Consul.Web
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consul.Azure.Active.Directory.WebApi", "Consul.Azure.Active.Directory.WebApi\Consul.Azure.Active.Directory.WebApi.csproj", "{4CD182D1-7DFF-48FC-9F7C-C196752508AC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consul.Azure.Active.Directory.WebApp", "Consul.Azure.Active.Directory.WebApp\Consul.Azure.Active.Directory.WebApp.csproj", "{63660B34-03D6-4A3E-8FC8-882CEE0940FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Consul.Azure.Active.DirectoryB2C..WebApp", "Consul.Azure.Active.Directory.WebApp\Consul.Azure.Active.DirectoryB2C..WebApp.csproj", "{63660B34-03D6-4A3E-8FC8-882CEE0940FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Azure.AD.B2C.WebApi", "Azure.AD.B2C.WebApi\Azure.AD.B2C.WebApi.csproj", "{6EEBDD60-0FF5-4241-8E07-6D0CBC84A073}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Azure.AD.B2C.WebApi", "Azure.AD.B2C.WebApi\Azure.AD.B2C.WebApi.csproj", "{6EEBDD60-0FF5-4241-8E07-6D0CBC84A073}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
