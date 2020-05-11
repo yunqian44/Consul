@@ -53,10 +53,6 @@ namespace Consul.Azure.Active.Directory.WebApi
                     {
                         Implicit = new OpenApiOAuthFlow
                         {
-                            Scopes = new Dictionary<string, string>
-                            {
-                                { "user_impersonation", "Access API" }
-                            },
                             AuthorizationUrl = new Uri($"https://login.chinacloudapi.cn/{ Appsettings.app(new string[] { "AzureAD", "TenantId" })}/oauth2/authorize")
                             
                         }
@@ -86,7 +82,7 @@ namespace Consul.Azure.Active.Directory.WebApi
                 c.SwaggerEndpoint($"/swagger/v1/swagger.json", $"{ApiName} v1");
 
                 c.OAuthClientId(Appsettings.app(new string[] { "Swagger", "ClientId" }));
-                c.OAuthClientSecret(Appsettings.app(new string[] { "Swagger", "ClientSecret" }));
+                //c.OAuthClientSecret(Appsettings.app(new string[] { "Swagger", "ClientSecret" }));
                 c.OAuthRealm(Appsettings.app(new string[] { "AzureAD", "ClientId" }));
                 c.OAuthAppName("My API V1");
                 c.OAuthScopeSeparator(" ");
