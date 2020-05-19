@@ -36,6 +36,36 @@ namespace Consul.WebApi
                 var cache = new MemoryCache(new MemoryCacheOptions());
                 return cache;
             });
+
+
+            #region CORS
+            //跨域第二种方法，声明策略，记得下边app中配置
+            services.AddCors(c =>
+            {
+                //↓↓↓↓↓↓↓注意正式环境不要使用这种全开放的处理↓↓↓↓↓↓↓↓↓↓
+                //c.AddPolicy("AllRequests", policy =>
+                //{
+                //    policy
+                //    .AllowAnyOrigin()//允许任何源
+                //    .AllowAnyMethod()//允许任何方式
+                //    .AllowAnyHeader()//允许任何头
+                //    .AllowCredentials();//允许cookie
+                //});
+                //↑↑↑↑↑↑↑注意正式环境不要使用这种全开放的处理↑↑↑↑↑↑↑↑↑↑
+
+
+                //一般采用这种方法
+                c.AddPolicy("LimitRequests", policy =>
+                {
+                    policy
+                    .WithOrigins("http://localhost:8080")//支持多个域名端口，注意端口号后不要带/斜杆：比如localhost:8000/，是错的
+                    .AllowAnyHeader()//Ensures that the policy allows any header.
+                    .AllowAnyMethod();
+                });
+            });
+            #endregion
+
+
             services.AddControllers();
 
 
@@ -78,6 +108,18 @@ namespace Consul.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            #region CORS(跨越资源共享)
+            //跨域第一种版本，启用跨域策略  不推荐使用
+            //app.UseCors("AllowAllOrigin"); 
+
+            //跨域第二种版本，请要ConfigureService中配置服务 services.AddCors();
+            //    app.UseCors(options => options.WithOrigins("http://localhost:8021").AllowAnyHeader()
+            //.AllowAnyMethod()); 
+
+            //跨域第三种方法，使用策略，详细策略信息在ConfigureService中
+            app.UseCors("LimitRequests");//将 CORS 中间件添加到 web 应用程序管线中, 以允许跨域请求。
+            #endregion
 
             app.UseHttpsRedirection();
 

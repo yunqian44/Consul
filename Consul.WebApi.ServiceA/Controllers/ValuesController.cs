@@ -18,10 +18,10 @@ namespace Consul.WebApi.Controllers
         {
             _count++;
             Console.WriteLine($"Get...{_count}");
-            if (_count <= 3)
-            {
-                System.Threading.Thread.Sleep(5000);
-            }
+            //if (_count <= 3)
+            //{
+            //    System.Threading.Thread.Sleep(5000);
+            //}
             return "请求 ServiceA-1 成功";
         }
     }
