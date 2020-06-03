@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 
 namespace Consul.WebApp
 {
@@ -35,6 +36,8 @@ namespace Consul.WebApp
             services.AddControllersWithViews();
 
             services.AddSingleton(new Appsettings(Environment.ContentRootPath));
+
+            IdentityModelEventSource.ShowPII = true; //Add this line
 
             //关闭默认映射，否则它可能修改从授权服务返回的各种claim属性
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
