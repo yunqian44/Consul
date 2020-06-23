@@ -35,7 +35,8 @@ namespace Consul.Azure.Active.Directory.WebApp
             services.AddSingleton(new Appsettings(Environment.ContentRootPath));
 
             services.AddAuthentication(AzureADB2CDefaults.AuthenticationScheme)
-           .AddAzureADB2C(options=> {
+           .AddAzureADB2C(options =>
+           {
                options.Instance = Appsettings.app("Azure_AD_B2C", "Instance");
                options.ClientId = Appsettings.app("Azure_AD_B2C", "ClientId");
                options.CallbackPath = Appsettings.app("Azure_AD_B2C", "CallbackPath");

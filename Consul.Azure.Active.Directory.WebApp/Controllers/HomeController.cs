@@ -9,6 +9,8 @@ using Consul.Azure.Active.Directory.WebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace Consul.Azure.Active.Directory.WebApp.Controllers
 {
@@ -46,9 +48,22 @@ namespace Consul.Azure.Active.Directory.WebApp.Controllers
 
         }
 
-        public async Task Logout()
+        //public IActionResult Logout()
+        //{
+        //   Task.Run(async()=> await HttpContext.SignOutAsync(AzureADB2CDefaults.AuthenticationScheme));
+        //   return RedirectToAction(nameof(HomeController.SignedOut), "Home");
+        //}
+
+        [HttpGet]
+        public IActionResult Logout()
         {
-            await HttpContext.SignOutAsync(AzureADB2CDefaults.AuthenticationScheme);
+            HttpContext.SignOutAsync(AzureADB2CDefaults.AuthenticationScheme);
+            if (!User.Identity.IsAuthenticated)
+            {
+                // Redirect to home page if the user is authenticated.
+                return RedirectToAction(nameof(HomeController.Index), "Home");
+            }
+            return RedirectToAction(nameof(HomeController.Index), "Home");
         }
     }
 }

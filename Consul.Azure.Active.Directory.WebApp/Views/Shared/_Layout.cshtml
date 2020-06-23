@@ -2,7 +2,7 @@
     string name = null;
     if (User.Identity.IsAuthenticated)
     {
-         name = User.Identity.Name;
+         name = string.IsNullOrWhiteSpace(User.Identity.Name)?"无名人士":User.Identity.Name;
     }
 }
 
