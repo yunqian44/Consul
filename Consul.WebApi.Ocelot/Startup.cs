@@ -86,6 +86,8 @@ namespace Consul.WebApi.Ocelot
                 app.UseDeveloperExceptionPage();
             }
 
+            
+
             app.UseRouting();
 
             app.UseAuthorization();

@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
@@ -38,8 +39,24 @@ namespace Consul.Azure.Active.Directory.WebApi
         {
             services.AddSingleton(new Appsettings(Environment.ContentRootPath));
 
-            services.AddAuthentication(AzureADDefaults.JwtBearerAuthenticationScheme)
-                .AddAzureADBearer(options => Configuration.Bind("AzureAd", options));
+
+            //services.AddAuthentication(AzureADDefaults.JwtBearerAuthenticationScheme)
+            //    .AddAzureADBearer(options => Configuration.Bind("AzureAd", options));
+
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer(o =>
+                {
+                    o.Audience = Appsettings.app(new string[] { "AzureAD", "ClientId" });
+                    o.RequireHttpsMetadata = false;
+                    o.SaveToken = true;
+                    o.Authority = Appsettings.app(new string[] { "AzureAD", "Authority" });
+                    o.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidateIssuerSigningKey = false,
+                        ValidIssuer = Appsettings.app(new string[] { "AzureAD", "Issuer" }),
+                        ValidateLifetime = true,
+                    };
+                });
 
             services.AddSwaggerGen(c =>
             {
@@ -54,7 +71,7 @@ namespace Consul.Azure.Active.Directory.WebApi
                         Implicit = new OpenApiOAuthFlow
                         {
                             AuthorizationUrl = new Uri($"https://login.chinacloudapi.cn/{ Appsettings.app(new string[] { "AzureAD", "TenantId" })}/oauth2/authorize")
-                            
+                            //AuthorizationUrl = new Uri($"https://login.chinacloudapi.cn/common/oauth2/authorize")
                         }
                     }
                 });
@@ -89,7 +106,7 @@ namespace Consul.Azure.Active.Directory.WebApi
                 c.OAuthAdditionalQueryStringParams(new Dictionary<string, string>() { { "resource", Appsettings.app(new string[] { "AzureAD", "ClientId" }) } });
             });
             #endregion
-
+            IdentityModelEventSource.ShowPII = true; // here
             app.UseAuthentication();
 
             app.UseRouting();
